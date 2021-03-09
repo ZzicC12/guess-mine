@@ -1,3 +1,50 @@
-body {
-  background-color: red;
+.chat_box {
+  margin: 0;
+  padding: 0 10px;
+  width: 600px;
+  height: 75vh;
+  overflow-y: auto;
+  background-color: #9bbbd4;
+  display: flex;
+  flex-direction: column;
+  li {
+    list-style: none;
+    margin-bottom: 5px;
+  }
+  .system {
+    width: 50%;
+    margin: 3px auto;
+    text-align: center;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 30px;
+    padding: 2px 0;
+  }
+  .me {
+    text-align: end;
+    margin-bottom: 16px;
+    span {
+      background-color: #fef01b;
+      width: 100%;
+      padding: 4px 12px;
+      border-radius: 10px;
+    }
+  }
+  .you {
+    text-align: start;
+    margin-bottom: 16px;
+    span {
+      background-color: white;
+      width: 100%;
+      padding: 4px 12px;
+      border-radius: 10px;
+    }
+  }
+}
+
+.chat {
+  width: 600px;
+  input {
+    width: 100%;
+  }
 }
