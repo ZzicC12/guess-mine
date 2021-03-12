@@ -146,6 +146,9 @@
     var answer_box = document.querySelector(".submit");
     var quiz_answer;
     var status = false;
+    var start_sound = new Audio("/sound/start.MP3");
+    var correct_sound = new Audio("/sound/correct.MP3");
+    var wrong_sound = new Audio("/sound/wrong.MP3");
 
     var current_status = function current_status() {
       return status;
@@ -226,6 +229,7 @@
         return item.painter === true;
       });
       (0, _printMsg.systemMsg)("Game Start");
+      start_sound.play();
 
       if (client.id === master.id) {
         (0, _printMsg.systemMsg)("당신은 출제자입니다.");
@@ -249,8 +253,10 @@
     var client_submit_answer = function client_submit_answer(data) {
       if (quiz_answer === data.answer) {
         (0, _printMsg.systemMsg)("".concat(data.answer, " \uD83C\uDF89 \uC815\uB2F5\uC785\uB2C8\uB2E4."));
+        correct_sound.play();
         client_game_end();
       } else {
+        wrong_sound.play();
         (0, _printMsg.systemMsg)("".concat(data.answer, " \u274C \uC624\uB2F5\uC785\uB2C8\uB2E4."));
       }
     };
