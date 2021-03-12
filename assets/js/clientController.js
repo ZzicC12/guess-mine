@@ -14,6 +14,9 @@ const btn = document.querySelector(".start_btn");
 const answer_box = document.querySelector(".submit");
 let quiz_answer;
 let status = false;
+const start_sound = new Audio("/sound/start.MP3");
+const correct_sound = new Audio("/sound/correct.MP3");
+const wrong_sound = new Audio("/sound/wrong.MP3");
 
 export const current_status = () => status;
 
@@ -55,6 +58,8 @@ export const client_game_start = (data) => {
   quiz_answer = data.answer;
   const master = data.users.find((item) => item.painter === true);
   systemMsg("Game Start");
+  start_sound.play();
+
   if (client.id === master.id) {
     systemMsg("당신은 출제자입니다.");
     controls.classList.remove("none");
@@ -71,8 +76,10 @@ export const client_game_start = (data) => {
 export const client_submit_answer = (data) => {
   if (quiz_answer === data.answer) {
     systemMsg(`${data.answer} 🎉 정답입니다.`);
+    correct_sound.play();
     client_game_end();
   } else {
+    wrong_sound.play();
     systemMsg(`${data.answer} ❌ 오답입니다.`);
   }
 };
