@@ -1,25 +1,59 @@
-import express from "express";
-import { join } from "path";
-import socket from "socket.io";
-import morgan from "morgan";
-import serverController from "./serverController";
+import { quiz } from "./quiz.js";
 
-const app = express();
-const PORT = 4000;
+let users = [];
 
-app.set("view engine", "pug");
-app.set("views", join(__dirname, "views"));
-app.use(express.static(join(__dirname, "static")));
-app.use(morgan("dev"));
+const server = (socket, io) => {
+  socket.on("client_set_name", (data) => {
+    socket.name = data.name;
+    users.push({
+      id: socket.id,
+      name: socket.name,
+      painter: false,
+    });
+    io.emit("server_update_user", { users });
+    socket.broadcast.emit("server_new_user", { name: data.name });
+  });
 
-app.get("/", (req, res) => res.render("home"));
+  socket.on("disconnect", () => {
+    socket.broadcast.emit("disconnected", { name: socket.name });
+    users = users.filter((item) => item.id !== socket.id);
+    socket.broadcast.emit("server_update_user", { users });
+  });
 
-const handleListen = () => {
-  console.log(`✅ Server running: http://localhost:${PORT}`);
+  socket.on("client_send_msg", (data) =>
+    socket.broadcast.emit("server_send_msg", {
+      message: data.message,
+      name: socket.name || "Anon",
+    })
+  );
+
+  socket.on("client_begin", () => socket.broadcast.emit("server_begin"));
+
+  socket.on("client_paint", ({ x, y, color }) =>
+    socket.broadcast.emit("server_paint", { x, y, color })
+  );
+
+  socket.on("client_fill", (data) =>
+    socket.broadcast.emit("server_fill", data)
+  );
+
+  socket.on("client_lineWidth", (data) =>
+    socket.broadcast.emit("server_lineWidth", data)
+  );
+
+  socket.on("client_game_start", () => {
+    users.forEach((item) => (item.painter = false));
+    const painter = users[Math.floor(Math.random() * users.length)];
+    painter["painter"] = true;
+    const answer = quiz[Math.floor(Math.random() * quiz.length)];
+    io.emit("server_game_start", { users, answer });
+  });
+
+  socket.on("client_submit_answer", (data) => {
+    io.emit("server_submit_answer", data);
+  });
+
+  socket.on("client_game_end", () => io.emit("server_game_end"));
 };
 
-const server = app.listen(PORT, handleListen);
-
-const io = socket(server);
-
-io.on("connection", (socket) => serverController(socket));
+export default server;

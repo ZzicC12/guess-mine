@@ -1,15 +1,17 @@
 import { userMsg } from "./printMsg";
-import { getSocket } from "./clientController";
+import { getSocket } from "./client";
 
+const client = getSocket();
 const chat_form = document.querySelector(".chat");
 const input = chat_form.querySelector("input");
 
 const handleSubmit = (event) => {
   event.preventDefault();
-  if (input.value) {
-    const socket = getSocket();
-    userMsg(input.value, "", "me");
-    socket.emit("sendMsg", { message: input.value });
+  const { value } = input;
+
+  if (value) {
+    userMsg(value, "", "me");
+    client.emit("client_send_msg", { message: value });
     input.value = "";
   }
 };

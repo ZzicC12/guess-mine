@@ -2,7 +2,7 @@
   "name": "guess-mine",
   "version": "1.0.0",
   "description": "Realtime Drawing Game built with SocketIO, Gulp, Node",
-  "main": "index.js",
+  "main": "app.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ZzicC12/guess-mine.git"
@@ -38,7 +38,7 @@
     "socket.io": "^3.1.2"
   },
   "scripts": {
-    "dev:server": "nodemon --exec babel-node src/server --ignore assets/ --ignore src/static",
+    "dev:server": "nodemon --exec babel-node src/app.js --ignore assets/ --ignore src/static",
     "dev:assets": "gulp"
   }
 }
