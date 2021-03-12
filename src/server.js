@@ -41,10 +41,9 @@ const server = (socket, io) => {
     socket.broadcast.emit("server_color", data)
   );
 
-  socket.on("client_lineWidth", (data) => {
-    socket.broadcast.emit("server_lineWidth", data);
-    console.log(data);
-  });
+  socket.on("client_lineWidth", (data) =>
+    socket.broadcast.emit("server_lineWidth", data)
+  );
 
   // 게임 관련 event
   socket.on("client_game_start", () => {
