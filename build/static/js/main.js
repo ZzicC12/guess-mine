@@ -118,6 +118,9 @@
       socket.on("server_game_end", function () {
         return (0, _clientController.client_game_end)();
       });
+      socket.on("server_color", function (data) {
+        return (0, _clientController.client_color)(data);
+      });
     };
 
     exports.client = client;
@@ -130,7 +133,7 @@
     Object.defineProperty(exports, "__esModule", {
       value: true
     });
-    exports.client_game_end = exports.client_submit_answer = exports.client_game_start = exports.client_lineWidth = exports.client_fill = exports.client_paint = exports.client_begin = exports.client_send_msg = exports.client_disconnected = exports.client_new_user = exports.client_update_user = void 0;
+    exports.client_game_end = exports.client_submit_answer = exports.client_game_start = exports.client_color = exports.client_lineWidth = exports.client_fill = exports.client_paint = exports.client_begin = exports.client_send_msg = exports.client_disconnected = exports.client_new_user = exports.client_update_user = exports.current_status = void 0;
 
     var _printMsg = require("./printMsg.js");
 
@@ -142,6 +145,13 @@
     var btn = document.querySelector(".start_btn");
     var answer_box = document.querySelector(".submit");
     var quiz_answer;
+    var status = false;
+
+    var current_status = function current_status() {
+      return status;
+    };
+
+    exports.current_status = current_status;
 
     var client_update_user = function client_update_user(data) {
       return (0, _printMsg.userList)(data);
@@ -174,8 +184,6 @@
     exports.client_begin = client_begin;
 
     var client_paint = function client_paint(data) {
-      _paint.ctx.strokeStyle = data.color;
-
       _paint.ctx.lineTo(data.x, data.y);
 
       _paint.ctx.stroke();
@@ -199,7 +207,14 @@
 
     exports.client_lineWidth = client_lineWidth;
 
+    var client_color = function client_color(data) {
+      return _paint.ctx.strokeStyle = data;
+    };
+
+    exports.client_color = client_color;
+
     var client_game_start = function client_game_start(data) {
+      status = true;
       btn.textContent = "Game Stop";
       _paint.ctx.fillStyle = "white";
 
@@ -224,6 +239,8 @@
         answer_box.classList.remove("none");
 
         _paint.controls.classList.add("none");
+
+        btn.style.visibility = "hidden";
       }
     };
 
@@ -241,6 +258,8 @@
     exports.client_submit_answer = client_submit_answer;
 
     var client_game_end = function client_game_end() {
+      status = false;
+      btn.style.visibility = "visible";
       (0, _paint.enable)();
       (0, _paint.initial_setting)();
       btn.textContent = "Game Start";
@@ -282,25 +301,14 @@
   5: [function (require, module, exports) {
     "use strict";
 
-    Object.defineProperty(exports, "__esModule", {
-      value: true
-    });
-    exports.current_status = void 0;
-
     var _printMsg = require("./printMsg.js");
 
     var _client = require("./client.js");
 
+    var client = (0, _client.getSocket)();
     var btn = document.querySelector(".start_btn");
     var ul = document.querySelector(".user_list");
     var answer_form = document.querySelector(".answer_form");
-
-    var current_status = function current_status() {
-      return status;
-    };
-
-    exports.current_status = current_status;
-    var client = (0, _client.getSocket)();
 
     var handleSubmit = function handleSubmit(event) {
       event.preventDefault();
@@ -396,6 +404,8 @@
 
     var _client = require("./client");
 
+    var _clientController = require("./clientController.js");
+
     var canvas = document.querySelector("#jsCanvas");
     exports.canvas = canvas;
     var ctx = canvas.getContext("2d");
@@ -407,7 +417,6 @@
     var btns = document.querySelector(".controls__btns");
     var paint = document.querySelector("#jsPaint");
     var fill = document.querySelector("#jsFill");
-    var btn = document.querySelector(".start_btn");
     var painting = false;
     var mode = "Paint";
     var currentColor = "";
@@ -434,12 +443,9 @@
     var handleInput = function handleInput(event) {
       var value = event.target.value;
       ctx.lineWidth = value;
-
-      if (btn.textContent === "Game Stop") {
-        client.emit("client_lineWidth", {
-          value: value
-        });
-      }
+      (0, _clientController.current_status)() && client.emit("client_lineWidth", {
+        value: value
+      });
     };
 
     var paintEnd = function paintEnd() {
@@ -452,14 +458,10 @@
         var y = event.offsetY;
         ctx.lineTo(x, y);
         ctx.stroke();
-
-        if (btn.textContent === "Game Stop") {
-          client.emit("client_paint", {
-            x: x,
-            y: y,
-            color: currentColor
-          });
-        }
+        (0, _clientController.current_status)() && client.emit("client_paint", {
+          x: x,
+          y: y
+        });
       }
     };
 
@@ -467,10 +469,7 @@
       if (mode === "Paint") {
         ctx.beginPath();
         painting = true;
-
-        if (btn.textContent === "Game Stop") {
-          client.emit("client_begin");
-        }
+        (0, _clientController.current_status)() && client.emit("client_begin");
       }
     };
 
@@ -481,15 +480,13 @@
       ctx.strokeStyle = backgroundColor;
       ctx.fillStyle = backgroundColor;
       currentColor = backgroundColor;
+      (0, _clientController.current_status)() && client.emit("client_color", currentColor);
 
       if (mode === "Fill") {
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        if (btn.textContent === "Game Stop") {
-          client.emit("client_fill", {
-            color: currentColor
-          });
-        }
+        (0, _clientController.current_status)() && client.emit("client_fill", {
+          color: currentColor
+        });
       }
 
       color_array.forEach(function (item) {
@@ -524,16 +521,16 @@
     exports.enable = enable;
 
     var initial_setting = function initial_setting() {
-      ctx.strokeStyle = "rgb(44, 44, 44)";
+      // 기본 색상, 굵기 설정
+      ctx.lineWidth = 5;
+      ctx.strokeStyle = "rgb(44, 44, 44)"; // control 설정
+
       color_array.forEach(function (item) {
         return item.style.transform = "scale(1)";
       });
       color_array[0].style.transform = "scale(1.5)";
-      var value = 5;
-      client.emit("client_lineWidth", {
-        value: value
-      });
       controls.classList.remove("none");
+      fill.style.opacity = 0.5;
     };
 
     exports.initial_setting = initial_setting;
@@ -541,8 +538,6 @@
     function init() {
       ctx.fillStyle = "white";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      color_array[0].style.transform = "scale(1.5)";
-      fill.style.opacity = 0.5;
       color_array.forEach(function (item) {
         return item.addEventListener("click", handleColor);
       });
@@ -552,7 +547,8 @@
 
     init();
   }, {
-    "./client": 2
+    "./client": 2,
+    "./clientController.js": 3
   }],
   8: [function (require, module, exports) {
     "use strict";

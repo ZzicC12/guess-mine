@@ -1,13 +1,11 @@
 import { systemMsg } from "./printMsg.js";
 import { getSocket } from "./client.js";
 
+const client = getSocket();
+
 const btn = document.querySelector(".start_btn");
 const ul = document.querySelector(".user_list");
 const answer_form = document.querySelector(".answer_form");
-
-export const current_status = () => status;
-
-const client = getSocket();
 
 const handleSubmit = (event) => {
   event.preventDefault();

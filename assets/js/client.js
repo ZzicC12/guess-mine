@@ -10,6 +10,7 @@ import {
   client_lineWidth,
   client_game_start,
   client_game_end,
+  client_color,
 } from "./clientController.js";
 
 const socket = io("/");
@@ -29,4 +30,5 @@ export const client = (name) => {
   socket.on("server_game_start", (data) => client_game_start(data));
   socket.on("server_submit_answer", (data) => client_submit_answer(data));
   socket.on("server_game_end", () => client_game_end());
+  socket.on("server_color", (data) => client_color(data));
 };

@@ -27,20 +27,26 @@ const server = (socket, io) => {
     })
   );
 
+  // 색상 관련 event
   socket.on("client_begin", () => socket.broadcast.emit("server_begin"));
 
-  socket.on("client_paint", ({ x, y, color }) =>
-    socket.broadcast.emit("server_paint", { x, y, color })
+  socket.on("client_paint", ({ x, y }) =>
+    socket.broadcast.emit("server_paint", { x, y })
   );
 
   socket.on("client_fill", (data) =>
     socket.broadcast.emit("server_fill", data)
   );
-
-  socket.on("client_lineWidth", (data) =>
-    socket.broadcast.emit("server_lineWidth", data)
+  socket.on("client_color", (data) =>
+    socket.broadcast.emit("server_color", data)
   );
 
+  socket.on("client_lineWidth", (data) => {
+    socket.broadcast.emit("server_lineWidth", data);
+    console.log(data);
+  });
+
+  // 게임 관련 event
   socket.on("client_game_start", () => {
     users.forEach((item) => (item.painter = false));
     const painter = users[Math.floor(Math.random() * users.length)];
@@ -49,9 +55,9 @@ const server = (socket, io) => {
     io.emit("server_game_start", { users, answer });
   });
 
-  socket.on("client_submit_answer", (data) => {
-    io.emit("server_submit_answer", data);
-  });
+  socket.on("client_submit_answer", (data) =>
+    io.emit("server_submit_answer", data)
+  );
 
   socket.on("client_game_end", () => io.emit("server_game_end"));
 };

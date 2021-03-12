@@ -40,26 +40,30 @@ var server = function server(socket, io) {
       message: data.message,
       name: socket.name || "Anon"
     });
-  });
+  }); // 색상 관련 event
+
   socket.on("client_begin", function () {
     return socket.broadcast.emit("server_begin");
   });
   socket.on("client_paint", function (_ref) {
     var x = _ref.x,
-        y = _ref.y,
-        color = _ref.color;
+        y = _ref.y;
     return socket.broadcast.emit("server_paint", {
       x: x,
-      y: y,
-      color: color
+      y: y
     });
   });
   socket.on("client_fill", function (data) {
     return socket.broadcast.emit("server_fill", data);
   });
-  socket.on("client_lineWidth", function (data) {
-    return socket.broadcast.emit("server_lineWidth", data);
+  socket.on("client_color", function (data) {
+    return socket.broadcast.emit("server_color", data);
   });
+  socket.on("client_lineWidth", function (data) {
+    socket.broadcast.emit("server_lineWidth", data);
+    console.log(data);
+  }); // 게임 관련 event
+
   socket.on("client_game_start", function () {
     users.forEach(function (item) {
       return item.painter = false;
@@ -75,7 +79,7 @@ var server = function server(socket, io) {
     });
   });
   socket.on("client_submit_answer", function (data) {
-    io.emit("server_submit_answer", data);
+    return io.emit("server_submit_answer", data);
   });
   socket.on("client_game_end", function () {
     return io.emit("server_game_end");

@@ -1,4 +1,5 @@
 import { getSocket } from "./client";
+import { current_status } from "./clientController.js";
 
 export const canvas = document.querySelector("#jsCanvas");
 export const ctx = canvas.getContext("2d");
@@ -9,7 +10,6 @@ const range = document.querySelector("#jsRange");
 const btns = document.querySelector(".controls__btns");
 const paint = document.querySelector("#jsPaint");
 const fill = document.querySelector("#jsFill");
-const btn = document.querySelector(".start_btn");
 
 let painting = false;
 let mode = "Paint";
@@ -36,9 +36,7 @@ const handleInput = (event) => {
     target: { value },
   } = event;
   ctx.lineWidth = value;
-  if (btn.textContent === "Game Stop") {
-    client.emit("client_lineWidth", { value });
-  }
+  current_status() && client.emit("client_lineWidth", { value });
 };
 
 const paintEnd = () => {
@@ -51,9 +49,7 @@ const drawing = (event) => {
     const y = event.offsetY;
     ctx.lineTo(x, y);
     ctx.stroke();
-    if (btn.textContent === "Game Stop") {
-      client.emit("client_paint", { x, y, color: currentColor });
-    }
+    current_status() && client.emit("client_paint", { x, y });
   }
 };
 
@@ -61,9 +57,7 @@ const paintStart = () => {
   if (mode === "Paint") {
     ctx.beginPath();
     painting = true;
-    if (btn.textContent === "Game Stop") {
-      client.emit("client_begin");
-    }
+    current_status() && client.emit("client_begin");
   }
 };
 
@@ -77,11 +71,10 @@ const handleColor = (event) => {
   ctx.strokeStyle = backgroundColor;
   ctx.fillStyle = backgroundColor;
   currentColor = backgroundColor;
+  current_status() && client.emit("client_color", currentColor);
   if (mode === "Fill") {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    if (btn.textContent === "Game Stop") {
-      client.emit("client_fill", { color: currentColor });
-    }
+    current_status() && client.emit("client_fill", { color: currentColor });
   }
   color_array.forEach((item) => {
     if (item.dataset.number != number) {
@@ -111,19 +104,19 @@ export const enable = () => {
 };
 
 export const initial_setting = () => {
+  // 기본 색상, 굵기 설정
+  ctx.lineWidth = 5;
   ctx.strokeStyle = "rgb(44, 44, 44)";
+  // control 설정
   color_array.forEach((item) => (item.style.transform = "scale(1)"));
   color_array[0].style.transform = "scale(1.5)";
-  const value = 5;
-  client.emit("client_lineWidth", { value });
   controls.classList.remove("none");
+  fill.style.opacity = 0.5;
 };
 
 function init() {
   ctx.fillStyle = "white";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  color_array[0].style.transform = "scale(1.5)";
-  fill.style.opacity = 0.5;
   color_array.forEach((item) => item.addEventListener("click", handleColor));
   enable();
   initial_setting();

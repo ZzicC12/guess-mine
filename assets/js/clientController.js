@@ -13,6 +13,9 @@ const client = getSocket();
 const btn = document.querySelector(".start_btn");
 const answer_box = document.querySelector(".submit");
 let quiz_answer;
+let status = false;
+
+export const current_status = () => status;
 
 export const client_update_user = (data) => userList(data);
 
@@ -26,7 +29,6 @@ export const client_send_msg = (data) =>
 export const client_begin = () => ctx.beginPath();
 
 export const client_paint = (data) => {
-  ctx.strokeStyle = data.color;
   ctx.lineTo(data.x, data.y);
   ctx.stroke();
 };
@@ -42,7 +44,10 @@ export const client_lineWidth = (data) => {
   range.value = data.value;
 };
 
+export const client_color = (data) => (ctx.strokeStyle = data);
+
 export const client_game_start = (data) => {
+  status = true;
   btn.textContent = "Game Stop";
   ctx.fillStyle = "white";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -59,6 +64,7 @@ export const client_game_start = (data) => {
     disable();
     answer_box.classList.remove("none");
     controls.classList.add("none");
+    btn.style.visibility = "hidden";
   }
 };
 
@@ -72,6 +78,8 @@ export const client_submit_answer = (data) => {
 };
 
 export const client_game_end = () => {
+  status = false;
+  btn.style.visibility = "visible";
   enable();
   initial_setting();
   btn.textContent = "Game Start";
