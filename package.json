@@ -24,11 +24,12 @@
     "@babel/core": "^7.13.8",
     "@babel/node": "^7.13.0",
     "@babel/preset-env": "^7.13.9",
-    "@heroku-cli/plugin-buildpacks": "^7.47.13",
-    "@heroku/buildpack-registry": "^1.0.1",
+    "async-file": "^2.0.2",
     "babelify": "^10.0.0",
+    "cli-ux": "^4.9.3",
     "del": "^6.0.0",
     "express": "^4.17.1",
+    "got": "^9.6.0",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^7.0.1",
     "gulp-browserify": "^0.5.1",
@@ -44,7 +45,6 @@
   "scripts": {
     "dev:server": "nodemon --exec babel-node src/app.js --ignore assets/ --ignore src/static",
     "dev:assets": "gulp",
-    "build": "cp -R src/static build && cp -R src/views build",
-    "start": "node build/app.js"
+    "start": "node src/app.js"
   }
 }

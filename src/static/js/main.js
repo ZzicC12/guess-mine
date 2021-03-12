@@ -229,7 +229,7 @@ require("./paint.js");
 require("./game.js");
 
 require("./printMsg");
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImZha2VfNWUxMWNkN2YuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQTs7QUFDQTs7QUFDQTs7QUFDQTs7QUFDQTs7QUFDQTs7QUFDQSIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBcIi4vY2xpZW50Q29udHJvbGxlci5qc1wiO1xuaW1wb3J0IFwiLi9sb2dpbi5qc1wiO1xuaW1wb3J0IFwiLi9jbGllbnQuanNcIjtcbmltcG9ydCBcIi4vY2hhdC5qc1wiO1xuaW1wb3J0IFwiLi9wYWludC5qc1wiO1xuaW1wb3J0IFwiLi9nYW1lLmpzXCI7XG5pbXBvcnQgXCIuL3ByaW50TXNnXCI7XG4iXX0=
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImZha2VfODQ5NWU5MjAuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQTs7QUFDQTs7QUFDQTs7QUFDQTs7QUFDQTs7QUFDQTs7QUFDQSIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBcIi4vY2xpZW50Q29udHJvbGxlci5qc1wiO1xuaW1wb3J0IFwiLi9sb2dpbi5qc1wiO1xuaW1wb3J0IFwiLi9jbGllbnQuanNcIjtcbmltcG9ydCBcIi4vY2hhdC5qc1wiO1xuaW1wb3J0IFwiLi9wYWludC5qc1wiO1xuaW1wb3J0IFwiLi9nYW1lLmpzXCI7XG5pbXBvcnQgXCIuL3ByaW50TXNnXCI7XG4iXX0=
 },{"./chat.js":1,"./client.js":2,"./clientController.js":3,"./game.js":5,"./login.js":6,"./paint.js":7,"./printMsg":8}],5:[function(require,module,exports){
 "use strict";
 
