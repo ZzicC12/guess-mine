@@ -46,6 +46,6 @@
     "dev:server": "nodemon --exec babel-node src/app.js --ignore assets/ --ignore src/static",
     "dev:assets": "gulp",
     "build:server": "babel src --out-dir build ",
-    "start": "node src/app.js"
+    "start": "node build/app.js"
   }
 }
