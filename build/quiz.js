@@ -1,0 +1,8 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.quiz = void 0;
+var quiz = ["홍삼", "키보드", "백댄서", "경찰", "고드름", "오징어", "뱀파이어", "회전초밥", "성탄절", "듣기평가"];
+exports.quiz = quiz;

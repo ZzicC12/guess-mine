@@ -21,10 +21,10 @@
     "prettier": "^2.2.1"
   },
   "dependencies": {
-    "@babel/core": "^7.13.8",
+    "@babel/cli": "^7.13.10",
+    "@babel/core": "^7.13.10",
     "@babel/node": "^7.13.0",
     "@babel/preset-env": "^7.13.9",
-    "async-file": "^2.0.2",
     "babelify": "^10.0.0",
     "cli-ux": "^4.9.3",
     "del": "^6.0.0",
@@ -45,6 +45,7 @@
   "scripts": {
     "dev:server": "nodemon --exec babel-node src/app.js --ignore assets/ --ignore src/static",
     "dev:assets": "gulp",
+    "build:server": "babel src --out-dir build ",
     "start": "node src/app.js"
   }
 }
