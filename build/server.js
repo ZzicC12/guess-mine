@@ -60,8 +60,7 @@ var server = function server(socket, io) {
     return socket.broadcast.emit("server_color", data);
   });
   socket.on("client_lineWidth", function (data) {
-    socket.broadcast.emit("server_lineWidth", data);
-    console.log(data);
+    return socket.broadcast.emit("server_lineWidth", data);
   }); // 게임 관련 event
 
   socket.on("client_game_start", function () {
