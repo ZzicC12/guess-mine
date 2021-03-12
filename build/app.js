@@ -18,7 +18,7 @@ var _server = _interopRequireDefault(require("./server"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var app = (0, _express["default"])();
-var PORT = 4000;
+var PORT = process.env.PORT || 4000;
 app.set("view engine", "pug");
 app.set("views", (0, _path.join)(__dirname, "views"));
 app.use(_express["default"]["static"]((0, _path.join)(__dirname, "static")));
