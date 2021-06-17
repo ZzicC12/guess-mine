@@ -1,6 +1,7 @@
 # socket.io를 사용한 캐치마인드 게임
 
-##  개요
+##  개요 
+- <a href="https://limitless-dusk-66711.herokuapp.com/">링크</a>
 - 출제자가 주어진 제시어를 그려서 다른 사람이 맞추는 게임 / 랜덤으로 출제자, 제시어 지정
 - express, socket.io를 사용한 실시간 채팅, 실시간 그림 그리기 구현
 - canvas api를 사용하여 그림 그리기 구현
@@ -18,3 +19,4 @@
 - gulp를 사용한 css, js 파일 빌드 자동화하는 법
 - babel을 사용한 ES6+ 자바스크립트 코드 변환하는 법
 - socket을 사용한 서버 구현, 실시간 통신하는 법
+
